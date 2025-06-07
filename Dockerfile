@@ -1,18 +1,18 @@
-# Use official OpenJDK image
+FROM maven:3.8.6-openjdk-17 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Copy Maven build files
-COPY pom.xml .
-COPY src ./src
+COPY --from=build /app/target/product-display-0.0.1-SNAPSHOT.jar app.jar
 
-# Build jar inside container
-RUN mvn clean package -DskipTests
-
-
-# Expose port
 EXPOSE 8080
 
-# Run the jar file
-CMD ["java", "-jar", "target/product-display-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "app.jar"]
