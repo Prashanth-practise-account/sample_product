@@ -8,7 +8,8 @@ COPY pom.xml .
 COPY src ./src
 
 # Build jar inside container
-RUN ./mvnw clean package -DskipTests || mvn clean package -DskipTests
+RUN mvn clean package -DskipTests
+
 
 # Expose port
 EXPOSE 8080
